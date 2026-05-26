@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book a Move — Parking Daddy</title>
+<link rel="icon" type="image/png" href="parking_daddy_logo.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css" />
+<style>
+  /* Booking-form-specific styles */
+  .pill { background: var(--brand); color: #fff; border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+  .step-dot { width: 28px; height: 4px; border-radius: 2px; background: var(--line); transition: background .25s ease, width .25s ease; display: inline-block; }
+  .step-dot.active { background: var(--brand); width: 44px; }
+  .step-dot.done { background: var(--brand-deep); }
+  .cta { background: var(--brand); color: #fff; border-radius: 16px; padding: 16px 20px; font-weight: 600; font-size: 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 24px -8px rgba(46,107,184,0.5); transition: transform .12s ease, box-shadow .12s ease; }
+  .cta:active { transform: translateY(1px); }
+  .cta:disabled { opacity: 0.6; cursor: not-allowed; }
+  .cta.accent { background: var(--accent); box-shadow: 0 8px 24px -8px rgba(245,166,35,0.5); }
+  .ghost { border: 1px solid var(--line); background: #fff; border-radius: 16px; padding: 16px 20px; font-weight: 600; font-size: 15px; color: var(--ink); }
+  .step { display: none; animation: rise .35s ease both; }
+  .step.active { display: block; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px; }
+  .divider { height: 1px; background: var(--line); width: 100%; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .row .k { color: var(--muted); font-size: 13px; }
+  .row .v { color: var(--ink); font-size: 15px; font-weight: 500; text-align: right; max-width: 60%; }
+  .price-card { background: linear-gradient(135deg, var(--brand-deep), var(--brand)); color: #fff; border-radius: 20px; padding: 20px; position: relative; overflow: hidden; }
+  .price-card::after { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 70%); }
+  .icon-bubble { width: 38px; height: 38px; border-radius: 12px; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  textarea.field { min-height: 84px; }
+</style>
+</head>
+<body class="bg-[var(--paper)]">
+
+<nav class="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
+  <div class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <img src="parking_daddy_logo.png" alt="" class="w-9 h-9 object-contain" />
+      <div>
+        <div class="display text-base font-bold leading-none text-[var(--ink)]">Parking Daddy</div>
+        <div class="text-[10px] text-[var(--muted)] font-medium hidden sm:block">SF Street Cleaning Valet</div>
+      </div>
+    </a>
+    <div class="flex items-center gap-1 sm:gap-2">
+      <a href="index.html#how" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">How It Works</a>
+      <a href="index.html#pricing" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Pricing</a>
+      <a href="contact.html" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-2xl mx-auto px-5 py-8 md:py-12">
+  <div class="bg-white border border-[var(--line)] rounded-3xl p-5 md:p-8 shadow-xl shadow-[var(--ink)]/5">
+
+    <!-- Step indicator -->
+    <div class="flex items-center gap-2 mb-6">
+      <div class="step-dot" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+      <span class="ml-auto text-[11px] font-semibold uppercase tracking-wider text-[var(--muted)]" id="step-label">Step 1 of 3</span>
+    </div>
+
+    <!-- STEP 1 -->
+    <section class="step active" id="step-1">
+      <h1 class="display text-[34px] md:text-[40px] leading-[1.05] font-bold mb-1 text-[var(--ink)]">Tell us about your <em class="italic font-normal text-[var(--brand)]">ride.</em></h1>
+      <p class="text-[var(--muted)] text-sm mb-6">We'll move it before the sweepers arrive — no tickets, no tow trucks, no stress.</p>
+      <div class="space-y-4">
+        <div><label class="label" for="car-make">Make</label><input type="text" class="field" id="car-make" placeholder="Toyota" /></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="label" for="car-model">Model</label><input type="text" class="field" id="car-model" placeholder="Camry" /></div>
+          <div><label class="label" for="car-color">Color</label><input type="text" class="field" id="car-color" placeholder="Silver" /></div>
+        </div>
+        <div><label class="label" for="car-plate">License Plate</label><input type="text" class="field uppercase tracking-widest font-mono" id="car-plate" placeholder="7ABC123" maxlength="8" /></div>
+        <div class="pt-2">
+          <label class="label" for="address">Current Address in SF</label>
+          <input type="text" class="field" id="address" placeholder="1234 Fillmore St, San Francisco" />
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="step" id="step-2">
+      <h1 class="display text-[34px] md:text-[40px] leading-[1.05] font-bold mb-1 text-[var(--ink)]">When's the <em class="italic font-normal text-[var(--brand)]">sweep?</em></h1>
+      <p class="text-[var(--muted)] text-sm mb-6">Pick the time street sweeping <em>starts</em> on your block.</p>
+
+      <div class="card mb-5">
+        <label class="label" for="sweep-time">Street Sweeping Starts</label>
+        <input type="datetime-local" class="field" id="sweep-time" />
+        <div id="time-feedback" class="mt-3 hidden"></div>
+      </div>
+
+      <div class="card mb-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="icon-bubble"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
+          <div><div class="font-semibold text-[15px]">Key Pickup Instructions</div><div class="text-xs text-[var(--muted)]">How do we get your keys?</div></div>
+        </div>
+        <textarea class="field" id="pickup-instructions" placeholder="e.g., Doorman at front desk has a spare — ask for unit 4B."></textarea>
+      </div>
+
+      <div class="card">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="icon-bubble" style="background: var(--accent);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4M3 7v10l9 4 9-4V7M3 7l9 4 9-4M12 11v10"/></svg></div>
+          <div><div class="font-semibold text-[15px]">Key Return Instructions</div><div class="text-xs text-[var(--muted)]">Where do we leave your keys?</div></div>
+        </div>
+        <textarea class="field" id="return-instructions" placeholder="e.g., Drop in the lockbox by the gate, code 4729."></textarea>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="step" id="step-3">
+      <h1 class="display text-[34px] md:text-[40px] leading-[1.05] font-bold mb-1 text-[var(--ink)]">Almost <em class="italic font-normal text-[var(--brand)]">there.</em></h1>
+      <p class="text-[var(--muted)] text-sm mb-6">Review your details before we dispatch.</p>
+
+      <div class="price-card mb-5">
+        <div class="flex items-center justify-between mb-1 relative z-10">
+          <span class="text-[11px] uppercase tracking-[0.15em] opacity-80">Total Due Today</span>
+          <span id="price-badge" class="badge-standard">Standard</span>
+        </div>
+        <div class="display text-[56px] font-bold leading-none mt-2 relative z-10" id="price-display">$40</div>
+        <div class="text-xs mt-2 opacity-80 relative z-10" id="price-reason">4+ hours notice — standard rate</div>
+      </div>
+
+      <div class="card mb-5">
+        <div class="flex items-center justify-between mb-3"><span class="display text-lg font-bold">Your Vehicle</span><span class="pill">Step 1</span></div>
+        <div class="space-y-2">
+          <div class="row"><span class="k">Make & Model</span><span class="v" id="sum-makemodel">—</span></div>
+          <div class="row"><span class="k">Color</span><span class="v" id="sum-color">—</span></div>
+          <div class="row"><span class="k">Plate</span><span class="v font-mono" id="sum-plate">—</span></div>
+          <div class="row"><span class="k">Parked At</span><span class="v" id="sum-address">—</span></div>
+        </div>
+      </div>
+
+      <div class="card mb-5">
+        <div class="flex items-center justify-between mb-3"><span class="display text-lg font-bold">The Plan</span><span class="pill">Step 2</span></div>
+        <div class="space-y-3">
+          <div class="row"><span class="k">Sweep Starts</span><span class="v" id="sum-sweeptime">—</span></div>
+          <div class="row"><span class="k">Notice</span><span class="v" id="sum-notice">—</span></div>
+          <div class="divider !mt-3"></div>
+          <div><div class="k mb-1">Key Pickup</div><div class="v text-left !max-w-full" id="sum-pickup">—</div></div>
+          <div><div class="k mb-1">Key Return</div><div class="v text-left !max-w-full" id="sum-return">—</div></div>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-[var(--muted)] text-center leading-relaxed mb-4">
+        By confirming, you authorize Parking Daddy to move your vehicle before the listed sweeping time and return it to a legal spot on the same block. See <a href="terms.html" class="underline text-[var(--brand)]">Terms</a> & <a href="privacy.html" class="underline text-[var(--brand)]">Privacy</a>.
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-6">
+      <button class="ghost hidden" id="btn-back" style="width: 30%;">← Back</button>
+      <button class="cta" id="btn-next">
+        <span id="btn-next-label">Continue</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <p class="text-center mt-6 text-sm text-[var(--muted)]">
+    First time? <a href="index.html#how" class="text-[var(--brand)] font-medium hover:underline">See how it works →</a>
+  </p>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<footer class="bg-[var(--ink)] text-[var(--paper)] py-12 mt-12">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2.5 mb-3">
+          <img src="parking_daddy_logo.png" alt="" class="w-10 h-10 object-contain bg-white rounded-lg p-1" />
+          <div class="display text-xl font-bold">Parking Daddy</div>
+        </div>
+        <p class="text-sm opacity-70 max-w-xs">SF's street-cleaning car valet. Move your car without lifting a finger.</p>
+        <a href="https://instagram.com/parkingdaddy" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-4 text-sm opacity-80 hover:opacity-100">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.2 8.8 2.2 12 2.2zm0 8.74A3.06 3.06 0 1015.06 14 3.06 3.06 0 0012 10.94zM18.4 7.6a1.15 1.15 0 11-2.3 0 1.15 1.15 0 012.3 0z"/></svg>
+          @parkingdaddy
+        </a>
+      </div>
+      <div>
+        <div class="text-xs font-bold uppercase tracking-widest opacity-50 mb-3">Service</div>
+        <ul class="space-y-2 text-sm opacity-90">
+          <li><a href="index.html#how" class="hover:opacity-70">How It Works</a></li>
+          <li><a href="index.html#pricing" class="hover:opacity-70">Pricing</a></li>
+          <li><a href="index.html#faq" class="hover:opacity-70">FAQ</a></li>
+          <li><a href="book.html" class="hover:opacity-70">Book a Move</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-xs font-bold uppercase tracking-widest opacity-50 mb-3">Company</div>
+        <ul class="space-y-2 text-sm opacity-90">
+          <li><a href="contact.html" class="hover:opacity-70">Contact Us</a></li>
+          <li><a href="terms.html" class="hover:opacity-70">Terms of Service</a></li>
+          <li><a href="privacy.html" class="hover:opacity-70">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs opacity-60">
+      <div>© 2026 Parking Daddy. San Francisco, CA.</div>
+      <div>Made with care in the Marina.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  // Supabase setup
+  // ============================================================
+  // Replace with your project URL + anon key from Supabase Dashboard → Settings → API
+  const SUPABASE_URL = 'https://gwnokpzngaajwfrtaomy.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bm9rcHpuZ2FhandmcnRhb215Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NjU1NzQsImV4cCI6MjA5NTM0MTU3NH0.BSjCRSN8Of09RYwH37zhiisE-bKLAUBj1ts2zFGLF4I';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentStep = 1;
+  const totalSteps = 3;
+  let isSubmitting = false;
+
+  const $ = (id) => document.getElementById(id);
+
+  function showToast(message, type = 'success') {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  // Default sweep time = tomorrow 8am
+  (function setDefaultTime() {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    t.setHours(8, 0, 0, 0);
+    const pad = (n) => String(n).padStart(2, '0');
+    $('sweep-time').value = `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}T${pad(t.getHours())}:${pad(t.getMinutes())}`;
+  })();
+
+  function updateStepUI() {
+    document.querySelectorAll('.step').forEach((el, i) => {
+      el.classList.toggle('active', (i + 1) === currentStep);
+    });
+    for (let i = 1; i <= totalSteps; i++) {
+      const dot = $(`dot-${i}`);
+      dot.classList.remove('active', 'done');
+      if (i < currentStep) dot.classList.add('done');
+      else if (i === currentStep) dot.classList.add('active');
+    }
+    $('step-label').textContent = `Step ${currentStep} of ${totalSteps}`;
+    $('btn-back').classList.toggle('hidden', currentStep === 1);
+
+    if (currentStep === 3) {
+      $('btn-next-label').textContent = 'Confirm & Pay';
+      $('btn-next').classList.add('accent');
+      populateSummary();
+    } else {
+      $('btn-next-label').textContent = 'Continue';
+      $('btn-next').classList.remove('accent');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function calculatePricing() {
+    const sweepTimeStr = $('sweep-time').value;
+    if (!sweepTimeStr) return { price: 40, label: 'Standard', reason: 'Select a sweep time', urgent: false, hoursAway: null };
+    const sweep = new Date(sweepTimeStr);
+    const hoursAway = (sweep.getTime() - new Date().getTime()) / (1000 * 60 * 60);
+    if (hoursAway < 4) {
+      return {
+        price: 60, label: 'Last Minute', urgent: true, hoursAway,
+        reason: hoursAway < 0 ? 'Sweep time is in the past — please pick a future time' : `Only ${hoursAway.toFixed(1)} hrs notice — last minute rate`
+      };
+    }
+    return { price: 40, label: 'Standard', urgent: false, hoursAway, reason: `${hoursAway.toFixed(1)} hours notice — standard rate` };
+  }
+
+  function updatePriceFeedback() {
+    const p = calculatePricing();
+    const feedback = $('time-feedback');
+    if (p.hoursAway === null) { feedback.classList.add('hidden'); return; }
+    feedback.classList.remove('hidden');
+    feedback.innerHTML = p.urgent ? `<span class="badge-urgent">⚡ Last Minute · $60</span>` : `<span class="badge-standard">✓ Standard · $40</span>`;
+  }
+  $('sweep-time').addEventListener('change', updatePriceFeedback);
+  $('sweep-time').addEventListener('input', updatePriceFeedback);
+
+  function populateSummary() {
+    const make = $('car-make').value.trim() || '—';
+    const model = $('car-model').value.trim() || '';
+    $('sum-makemodel').textContent = model ? `${make} ${model}` : make;
+    $('sum-color').textContent = $('car-color').value.trim() || '—';
+    $('sum-plate').textContent = $('car-plate').value.trim().toUpperCase() || '—';
+    $('sum-address').textContent = $('address').value.trim() || '—';
+
+    const sweepStr = $('sweep-time').value;
+    if (sweepStr) {
+      $('sum-sweeptime').textContent = new Date(sweepStr).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    } else { $('sum-sweeptime').textContent = '—'; }
+
+    $('sum-pickup').textContent = $('pickup-instructions').value.trim() || 'Not specified';
+    $('sum-return').textContent = $('return-instructions').value.trim() || 'Not specified';
+
+    const p = calculatePricing();
+    $('price-display').textContent = `$${p.price}`;
+    $('price-reason').textContent = p.reason;
+    const badge = $('price-badge');
+    if (p.urgent) { badge.className = 'badge-urgent'; badge.textContent = '⚡ Last Minute'; }
+    else { badge.className = 'badge-standard'; badge.textContent = '✓ Standard'; }
+    $('sum-notice').textContent = p.hoursAway !== null && p.hoursAway >= 0 ? `${p.hoursAway.toFixed(1)} hours` : '—';
+  }
+
+  function validateStep(step) {
+    if (step === 1) {
+      for (const id of ['car-make', 'car-model', 'car-color', 'car-plate', 'address']) {
+        const el = $(id);
+        if (!el.value.trim()) {
+          el.focus();
+          el.style.borderColor = 'var(--accent)';
+          setTimeout(() => el.style.borderColor = '', 1500);
+          return false;
+        }
+      }
+    }
+    if (step === 2) {
+      if (!$('sweep-time').value) { $('sweep-time').focus(); return false; }
+      const p = calculatePricing();
+      if (p.hoursAway !== null && p.hoursAway < 0) { showToast('Please choose a sweep time in the future.', 'error'); return false; }
+    }
+    return true;
+  }
+
+  // ============================================================
+  // Submit booking to Supabase
+  // ============================================================
+  async function submitBooking() {
+    if (isSubmitting) return;
+    isSubmitting = true;
+    $('btn-next-label').textContent = 'Saving…';
+    $('btn-next').disabled = true;
+
+    const pricing = calculatePricing();
+    const newBooking = {
+      car_info: {
+        make:  $('car-make').value.trim(),
+        model: $('car-model').value.trim(),
+        color: $('car-color').value.trim(),
+        plate: $('car-plate').value.trim().toUpperCase()
+      },
+      current_location:   $('address').value.trim(),
+      sweeping_time:      new Date($('sweep-time').value).toISOString(),
+      key_pickup_notes:   $('pickup-instructions').value.trim(),
+      key_return_notes:   $('return-instructions').value.trim(),
+      calculated_price:   pricing.price,
+      payment_status:     'pending'
+    };
+
+    const { error } = await db
+  .from('bookings')
+  .insert(newBooking);
+
+    $('btn-next').disabled = false;
+
+    if (error) {
+      console.error('Supabase insert failed:', error);
+      showToast('Could not save booking. Please try again.', 'error');
+      $('btn-next-label').textContent = 'Confirm & Pay';
+      isSubmitting = false;
+      return;
+    }
+
+    console.log('Booking saved!');
+    showToast('✓ Booking confirmed!', 'success');
+    $('btn-next-label').textContent = 'Booked ✓';
+  }
+
+  $('btn-next').addEventListener('click', () => {
+    if (currentStep === totalSteps) { submitBooking(); return; }
+    if (!validateStep(currentStep)) return;
+    currentStep++;
+    updateStepUI();
+  });
+
+  $('btn-back').addEventListener('click', () => {
+    if (currentStep > 1) { currentStep--; updateStepUI(); }
+  });
+
+  updateStepUI();
+  updatePriceFeedback();
+</script>
+</body>
+</html>

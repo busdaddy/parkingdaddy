@@ -1,0 +1,259 @@
+/* ============================================================
+   Parking Daddy — shared styles
+   Linked from every page via <link rel="stylesheet" href="shared.css" />
+   ============================================================ */
+
+:root {
+  --ink: #1E3A66;
+  --brand: #4A90D9;
+  --brand-deep: #2E6BB8;
+  --brand-soft: #DCEAF7;
+  --paper: #F4F8FC;
+  --paper-soft: #E8F0F9;
+  --accent: #F5A623;
+  --accent-soft: #FFE8C9;
+  --line: #C9D9EA;
+  --muted: #6B7B92;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter Tight', system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+.display { font-family: 'Fraunces', serif; letter-spacing: -0.02em; }
+
+/* ---------- buttons ---------- */
+.cta-lg {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--brand); color: #fff;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-weight: 600; font-size: 15px;
+  box-shadow: 0 8px 24px -8px rgba(46,107,184,0.5);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.cta-lg:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(46,107,184,0.6); }
+.cta-lg:active { transform: translateY(1px); }
+
+.cta-sm {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--ink); color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600; font-size: 13px;
+}
+.cta-sm:hover { background: var(--brand); }
+
+.ghost-lg {
+  display: inline-flex; align-items: center;
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 600; font-size: 15px;
+  color: var(--ink);
+}
+.ghost-lg:hover { border-color: var(--brand); color: var(--brand); }
+
+/* ---------- eyebrow label above section headings ---------- */
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 14px;
+}
+
+/* ---------- live dot ---------- */
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(245,166,35,0.6);
+  animation: pulse 1.6s infinite;
+  display: inline-block;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(245,166,35,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(245,166,35,0); }
+  100% { box-shadow: 0 0 0 0 rgba(245,166,35,0); }
+}
+
+/* ---------- step cards (How It Works) ---------- */
+.step-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.step-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -12px rgba(30,58,102,0.2); }
+.step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #fff;
+  font-family: 'Fraunces', serif;
+  font-weight: 700; font-size: 20px;
+  margin-bottom: 16px;
+}
+
+/* ---------- pricing tiers ---------- */
+.price-tier {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 32px;
+}
+.price-tier-accent {
+  background: linear-gradient(180deg, var(--accent-soft), #fff 50%);
+  border-color: rgba(245,166,35,0.3);
+}
+.check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+  background: var(--brand-soft); color: var(--brand-deep);
+  border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.badge-standard {
+  display: inline-flex; align-items: center;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.badge-urgent {
+  display: inline-flex; align-items: center;
+  background: var(--accent-soft);
+  color: #B8740F;
+  border: 1px solid rgba(245,166,35,0.4);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- FAQ accordion ---------- */
+.faq-item {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 22px;
+  transition: border-color .15s ease;
+}
+.faq-item:hover { border-color: var(--brand); }
+.faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  color: var(--brand);
+  transition: transform .2s ease;
+  flex-shrink: 0;
+}
+.faq-item[open] summary::after { content: "−"; }
+.faq-item p {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ---------- form fields (used on contact + book pages) ---------- */
+.field {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 16px;
+  width: 100%;
+  color: var(--ink);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.field:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(74,144,217,0.15);
+}
+.field::placeholder { color: #9AA8BC; }
+.label {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 8px; display: block;
+}
+textarea.field { resize: none; min-height: 140px; line-height: 1.5; }
+
+/* ---------- legal page formatting ---------- */
+.legal-content {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+.legal-content h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 26px;
+  margin-top: 36px;
+  margin-bottom: 12px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.legal-content h3 {
+  font-weight: 600;
+  font-size: 17px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.legal-content p { margin-bottom: 14px; color: var(--muted); }
+.legal-content ul { margin: 14px 0 14px 20px; }
+.legal-content ul li { margin-bottom: 6px; color: var(--muted); list-style: disc; }
+.legal-content strong { color: var(--ink); font-weight: 600; }
+
+.legal-warning {
+  background: var(--accent-soft);
+  border: 1px solid rgba(245,166,35,0.4);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #8a5410;
+}
+
+/* ---------- toast (notifications) ---------- */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: #fff;
+  padding: 14px 22px; border-radius: 12px;
+  font-size: 14px; font-weight: 500;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.4);
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+  z-index: 100;
+  max-width: 340px; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: #C73E3E; }
+.toast.success { background: #2E8B57; }

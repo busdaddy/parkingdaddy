@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Parking Daddy</title>
+<meta name="description" content="Get in touch with Parking Daddy. Questions about service, coverage areas, or partnerships." />
+<link rel="icon" type="image/png" href="parking_daddy_logo.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css" />
+</head>
+<body class="bg-[var(--paper)]">
+
+<!-- ============ NAV ============ -->
+<nav class="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
+  <div class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <img src="parking_daddy_logo.png" alt="" class="w-9 h-9 object-contain" />
+      <div>
+        <div class="display text-base font-bold leading-none text-[var(--ink)]">Parking Daddy</div>
+        <div class="text-[10px] text-[var(--muted)] font-medium hidden sm:block">SF Street Cleaning Valet</div>
+      </div>
+    </a>
+    <div class="flex items-center gap-1 sm:gap-2">
+      <a href="index.html#how" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">How It Works</a>
+      <a href="index.html#pricing" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Pricing</a>
+      <a href="index.html#faq" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">FAQ</a>
+      <a href="contact.html" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--brand)]">Contact</a>
+      <a href="book.html" class="cta-sm">Book Now →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ CONTENT ============ -->
+<main class="max-w-5xl mx-auto px-5 py-12 md:py-20">
+  <div class="grid md:grid-cols-5 gap-10">
+
+    <!-- LEFT: Pitch + info -->
+    <div class="md:col-span-2">
+      <div class="eyebrow">Contact</div>
+      <h1 class="display text-4xl md:text-5xl font-bold text-[var(--ink)] leading-tight mb-4">
+        Get in <em class="italic font-normal text-[var(--brand)]">touch.</em>
+      </h1>
+      <p class="text-[var(--muted)] leading-relaxed mb-8">
+        Questions about service? Want us in your neighborhood? Partnership ideas? Drop us a note and we'll get back within a few hours during operating hours.
+      </p>
+
+      <div class="space-y-5">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-[var(--muted)] mb-1.5">Text or call</div>
+          <div class="flex items-center gap-2 text-[var(--ink)] font-medium">
+            <svg class="w-4 h-4 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.95.68l1.5 4.5a1 1 0 01-.5 1.21l-2.26 1.13a11 11 0 005.52 5.52l1.13-2.26a1 1 0 011.21-.5l4.5 1.5a1 1 0 01.68.95V19a2 2 0 01-2 2h-1C9.72 21 3 14.28 3 6V5z"/></svg>
+            (415) 555-0100
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-[var(--muted)] mb-1.5">Instagram</div>
+          <a href="https://instagram.com/parkingdaddy" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-[var(--ink)] font-medium hover:text-[var(--brand)]">
+            <svg class="w-4 h-4 text-[var(--brand)]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.2 8.8 2.2 12 2.2zm0 8.74A3.06 3.06 0 1015.06 14 3.06 3.06 0 0012 10.94zM18.4 7.6a1.15 1.15 0 11-2.3 0 1.15 1.15 0 012.3 0z"/></svg>
+            @parkingdaddy
+          </a>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-[var(--muted)] mb-1.5">Hours</div>
+          <div class="text-[var(--ink)] font-medium">Mon–Fri, 6am – 2pm PT</div>
+          <div class="text-sm text-[var(--muted)] mt-1">Matching SF street-sweeping windows</div>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-[var(--muted)] mb-1.5">Coverage</div>
+          <div class="text-[var(--ink)] font-medium">94123 — Marina · Cow Hollow · Pac Heights</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="md:col-span-3">
+      <div class="bg-white border border-[var(--line)] rounded-2xl p-6 md:p-8">
+        <h2 class="display text-2xl font-bold mb-1 text-[var(--ink)]">Send a message</h2>
+        <p class="text-sm text-[var(--muted)] mb-6">We'll reply by text or DM, whichever you prefer.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="label" for="contact-name">Your Name</label>
+            <input type="text" class="field" id="contact-name" placeholder="Jane Doe" />
+          </div>
+          <div>
+            <label class="label" for="contact-email">Email or Phone</label>
+            <input type="text" class="field" id="contact-email" placeholder="jane@example.com or (415) 555-0123" />
+          </div>
+          <div>
+            <label class="label" for="contact-message">Message</label>
+            <textarea class="field" id="contact-message" placeholder="Tell us what's up — questions, a neighborhood you want us in, anything."></textarea>
+          </div>
+          <button class="cta-lg w-full justify-center" id="send-btn">
+            Send Message →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-[var(--ink)] text-[var(--paper)] py-12 mt-12">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2.5 mb-3">
+          <img src="parking_daddy_logo.png" alt="" class="w-10 h-10 object-contain bg-white rounded-lg p-1" />
+          <div class="display text-xl font-bold">Parking Daddy</div>
+        </div>
+        <p class="text-sm opacity-70 max-w-xs">SF's street-cleaning car valet. Move your car without lifting a finger.</p>
+        <a href="https://instagram.com/parkingdaddy" target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-4 text-sm opacity-80 hover:opacity-100">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.2 8.8 2.2 12 2.2zm0 8.74A3.06 3.06 0 1015.06 14 3.06 3.06 0 0012 10.94zM18.4 7.6a1.15 1.15 0 11-2.3 0 1.15 1.15 0 012.3 0z"/></svg>
+          @parkingdaddy
+        </a>
+      </div>
+      <div>
+        <div class="text-xs font-bold uppercase tracking-widest opacity-50 mb-3">Service</div>
+        <ul class="space-y-2 text-sm opacity-90">
+          <li><a href="index.html#how" class="hover:opacity-70">How It Works</a></li>
+          <li><a href="index.html#pricing" class="hover:opacity-70">Pricing</a></li>
+          <li><a href="index.html#faq" class="hover:opacity-70">FAQ</a></li>
+          <li><a href="book.html" class="hover:opacity-70">Book a Move</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-xs font-bold uppercase tracking-widest opacity-50 mb-3">Company</div>
+        <ul class="space-y-2 text-sm opacity-90">
+          <li><a href="contact.html" class="hover:opacity-70">Contact Us</a></li>
+          <li><a href="terms.html" class="hover:opacity-70">Terms of Service</a></li>
+          <li><a href="privacy.html" class="hover:opacity-70">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs opacity-60">
+      <div>© 2026 Parking Daddy. San Francisco, CA.</div>
+      <div>Made with care in the Marina.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  // Supabase setup — same pattern as the booking form
+  // ============================================================
+  const SUPABASE_URL = 'https://gwnokpzngaajwfrtaomy.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bm9rcHpuZ2FhandmcnRhb215Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NjU1NzQsImV4cCI6MjA5NTM0MTU3NH0.BSjCRSN8Of09RYwH37zhiisE-bKLAUBj1ts2zFGLF4I';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const $ = (id) => document.getElementById(id);
+
+  function showToast(message, type = 'success') {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  let sending = false;
+  $('send-btn').addEventListener('click', async () => {
+    if (sending) return;
+
+    // Basic validation — required fields filled out
+    const name    = $('contact-name').value.trim();
+    const email   = $('contact-email').value.trim();
+    const message = $('contact-message').value.trim();
+    if (!name || !email || !message) {
+      showToast('Please fill out all fields.', 'error');
+      return;
+    }
+
+    sending = true;
+    $('send-btn').disabled = true;
+    $('send-btn').textContent = 'Sending…';
+
+    // Insert into the contact_messages table you created in the SQL editor.
+    // Column names here must match the SQL exactly.
+    const { error } = await db
+      .from('contact_messages')
+      .insert({ name, email, message });
+
+    $('send-btn').disabled = false;
+
+    if (error) {
+      console.error('Supabase insert failed:', error);
+      showToast('Could not send message. Please try again.', 'error');
+      $('send-btn').textContent = 'Send Message →';
+      sending = false;
+      return;
+    }
+
+    // Success — clear form and confirm
+    $('contact-name').value = '';
+    $('contact-email').value = '';
+    $('contact-message').value = '';
+    showToast('✓ Message sent — we\'ll get back to you soon!', 'success');
+    $('send-btn').textContent = 'Sent ✓';
+    setTimeout(() => {
+      $('send-btn').textContent = 'Send Message →';
+      sending = false;
+    }, 3000);
+  });
+</script>
+</body>
+</html>
