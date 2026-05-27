@@ -4,8 +4,9 @@
 // After a customer pays via Stripe Checkout, Stripe redirects them
 // to success.html with a session_id. That page calls this function
 // to: (1) verify the payment actually succeeded, (2) save the
-// booking to Supabase with payment_status='paid', and (3) fire off
-// confirmation emails to the customer and operator (non-blocking).
+// booking to Supabase with payment_status='paid', and (3) send
+// confirmation emails to the customer and operator (awaited so
+// Vercel doesn't kill them before they fire).
 // ============================================================
 const Stripe = require('stripe');
 const sgMail = require('@sendgrid/mail');
@@ -78,18 +79,18 @@ module.exports = async (req, res) => {
     // Customer email (Stripe Checkout collects this automatically)
     const customerEmail = session.customer_details?.email || null;
 
-    // Fire-and-forget emails — never block the response.
-    // If SendGrid is down or errors, the booking still confirms.
+    // Await emails so Vercel doesn't kill the function before they send.
+    // If SendGrid errors, log it but still return success to the customer.
     try {
-  await sendEmails({
-    bookingData,
-    savedBooking,
-    customerEmail,
-    stripeSessionId: session_id
-  });
-} catch (err) {
-  console.error('Email send error:', err);
-}
+      await sendEmails({
+        bookingData,
+        savedBooking,
+        customerEmail,
+        stripeSessionId: session_id
+      });
+    } catch (err) {
+      console.error('Email send error:', err);
+    }
 
     return res.status(200).json({
       success: true,
@@ -105,7 +106,32 @@ module.exports = async (req, res) => {
   }
 };
 
-// ---------- EMAIL HELPERS ----------
+// ---------- HELPERS ----------
+
+// Format a date string (e.g. "2026-05-27T15:00:00.000Z") into a
+// human-readable Pacific Time string like "Wed, May 27 at 8:00 AM PT".
+// Falls back gracefully if the input isn't a parseable date.
+function formatSweepTime(raw) {
+  if (!raw) return '—';
+  const d = new Date(raw);
+  if (isNaN(d.getTime())) return raw; // not a parseable date — just show what we got
+  try {
+    const datePart = d.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'America/Los_Angeles'
+    });
+    const timePart = d.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/Los_Angeles'
+    });
+    return `${datePart} at ${timePart} PT`;
+  } catch (e) {
+    return raw;
+  }
+}
 
 async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSessionId }) {
   if (!process.env.SENDGRID_API_KEY) {
@@ -124,6 +150,9 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
   const vehicleStr = [car.color, car.make, car.model].filter(Boolean).join(' ') || 'Vehicle';
   const plate = car.license_plate || car.plate || '';
 
+  // Pretty-formatted sweep time for display in emails + subject
+  const sweepTimeFormatted = formatSweepTime(bookingData.sweeping_time);
+
   const tasks = [];
 
   // 1. Customer confirmation email
@@ -134,7 +163,7 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
         from: { email: FROM, name: 'Parking Daddy' },
         replyTo: FROM,
         subject: `You're all set — Parking Daddy booking #${shortId}`,
-        html: customerEmailHtml({ bookingData, shortId, vehicleStr, plate })
+        html: customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeFormatted })
       })
     );
   }
@@ -146,8 +175,8 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
         to: OPERATOR,
         from: { email: FROM, name: 'Parking Daddy Bookings' },
         replyTo: FROM,
-        subject: `🚗 New booking #${shortId} — ${bookingData.current_location} @ ${bookingData.sweeping_time}`,
-        html: operatorEmailHtml({ bookingData, shortId, vehicleStr, plate, customerEmail, stripeSessionId })
+        subject: `🚗 New booking #${shortId} — ${bookingData.current_location} @ ${sweepTimeFormatted}`,
+        html: operatorEmailHtml({ bookingData, shortId, vehicleStr, plate, customerEmail, stripeSessionId, sweepTimeFormatted })
       })
     );
   }
@@ -155,7 +184,10 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
   await Promise.allSettled(tasks);
 }
 
-function customerEmailHtml({ bookingData, shortId, vehicleStr, plate }) {
+// SVG checkmark — immune to HTML-entity mangling in email clients.
+const CHECKMARK_SVG = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeFormatted }) {
   return `
 <!DOCTYPE html>
 <html>
@@ -166,9 +198,9 @@ function customerEmailHtml({ bookingData, shortId, vehicleStr, plate }) {
       <div style="font-size:13px;color:#6b7a8f;letter-spacing:0.5px;">SF STREET CLEANING VALET</div>
     </div>
 
-    <div style="background:#fff;border-radius:12px;padding:32px 28px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+    <div style="background:#ffffff;border-radius:12px;padding:32px 28px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
       <div style="text-align:center;margin-bottom:24px;">
-        <div style="width:56px;height:56px;background:#22c55e;border-radius:50%;margin:0 auto 16px;line-height:56px;color:#fff;font-size:28px;">&check;</div>
+        <table align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;"><tr><td width="56" height="56" align="center" valign="middle" style="background:#22c55e;border-radius:50%;width:56px;height:56px;">${CHECKMARK_SVG}</td></tr></table>
         <h1 style="margin:0;font-size:28px;color:#1E3A66;">You're all set.</h1>
         <p style="margin:8px 0 0;color:#6b7a8f;">Payment received. We've got your car covered.</p>
       </div>
@@ -177,7 +209,7 @@ function customerEmailHtml({ bookingData, shortId, vehicleStr, plate }) {
         <tr><td style="color:#6b7a8f;">Booking ID</td><td align="right" style="font-weight:600;">#${shortId}</td></tr>
         <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Amount paid</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">$${bookingData.calculated_price}</td></tr>
         <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Vehicle</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${vehicleStr}${plate ? ` (${plate})` : ''}</td></tr>
-        <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Sweep starts</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${bookingData.sweeping_time}</td></tr>
+        <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Sweep starts</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${sweepTimeFormatted}</td></tr>
         <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Location</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${bookingData.current_location}</td></tr>
       </table>
 
@@ -194,20 +226,20 @@ function customerEmailHtml({ bookingData, shortId, vehicleStr, plate }) {
 </html>`;
 }
 
-function operatorEmailHtml({ bookingData, shortId, vehicleStr, plate, customerEmail, stripeSessionId }) {
+function operatorEmailHtml({ bookingData, shortId, vehicleStr, plate, customerEmail, stripeSessionId, sweepTimeFormatted }) {
   return `
 <!DOCTYPE html>
 <html>
-<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#1E3A66;">
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#ffffff;color:#1E3A66;">
   <div style="max-width:560px;margin:0 auto;padding:24px;">
-    <div style="background:#FF7A1A;color:#fff;padding:16px 20px;border-radius:8px 8px 0 0;">
+    <div style="background:#FF7A1A;color:#ffffff;padding:16px 20px;border-radius:8px 8px 0 0;">
       <div style="font-size:13px;opacity:0.9;letter-spacing:0.5px;">NEW BOOKING</div>
       <div style="font-size:22px;font-weight:700;">#${shortId}</div>
     </div>
 
-    <div style="background:#fff;border:1px solid #e5eaf2;border-top:0;border-radius:0 0 8px 8px;padding:20px;">
+    <div style="background:#ffffff;border:1px solid #e5eaf2;border-top:0;border-radius:0 0 8px 8px;padding:20px;">
       <table width="100%" cellpadding="8" cellspacing="0" style="font-size:15px;">
-        <tr><td style="color:#6b7a8f;width:140px;">Sweep starts</td><td style="font-weight:700;color:#FF7A1A;">${bookingData.sweeping_time}</td></tr>
+        <tr><td style="color:#6b7a8f;width:140px;">Sweep starts</td><td style="font-weight:700;color:#FF7A1A;">${sweepTimeFormatted}</td></tr>
         <tr><td style="color:#6b7a8f;">Location</td><td style="font-weight:600;">${bookingData.current_location}</td></tr>
         <tr><td style="color:#6b7a8f;">Vehicle</td><td style="font-weight:600;">${vehicleStr}</td></tr>
         <tr><td style="color:#6b7a8f;">Plate</td><td style="font-weight:600;font-family:monospace;">${plate || '—'}</td></tr>
@@ -218,8 +250,8 @@ function operatorEmailHtml({ bookingData, shortId, vehicleStr, plate, customerEm
         ${bookingData.key_return_notes ? `<tr><td style="color:#6b7a8f;vertical-align:top;">Key return</td><td style="font-style:italic;background:#fff8eb;padding:10px;border-radius:6px;">${bookingData.key_return_notes}</td></tr>` : ''}
       </table>
 
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid #e5eaf2;font-size:12px;color:#9aa5b8;">
-        Stripe session: <code style="font-size:11px;">${stripeSessionId}</code>
+      <div style="margin-top:20px;padding-top:12px;border-top:1px solid #f0f2f5;font-size:10px;color:#c5ccd6;text-align:right;font-family:monospace;letter-spacing:0.3px;">
+        ${stripeSessionId}
       </div>
     </div>
   </div>
