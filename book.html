@@ -336,45 +336,55 @@
   // Submit booking to Supabase
   // ============================================================
   async function submitBooking() {
-    if (isSubmitting) return;
-    isSubmitting = true;
-    $('btn-next-label').textContent = 'Saving…';
-    $('btn-next').disabled = true;
+  if (isSubmitting) return;
+  isSubmitting = true;
+  $('btn-next-label').textContent = 'Redirecting to payment…';
+  $('btn-next').disabled = true;
 
-    const pricing = calculatePricing();
-    const newBooking = {
-      car_info: {
-        make:  $('car-make').value.trim(),
-        model: $('car-model').value.trim(),
-        color: $('car-color').value.trim(),
-        plate: $('car-plate').value.trim().toUpperCase()
-      },
-      current_location:   $('address').value.trim(),
-      sweeping_time:      new Date($('sweep-time').value).toISOString(),
-      key_pickup_notes:   $('pickup-instructions').value.trim(),
-      key_return_notes:   $('return-instructions').value.trim(),
-      calculated_price:   pricing.price,
-      payment_status:     'pending'
-    };
+  const pricing = calculatePricing();
 
-    const { error } = await db
-  .from('bookings')
-  .insert(newBooking);
+  // Build the booking object — same shape as before, but we no longer
+  // save it to Supabase here. Instead, we send it to our server function,
+  // which creates a Stripe Checkout session. The booking will be saved
+  // AFTER payment succeeds (on the success page).
+  const booking = {
+    car_info: {
+      make:  $('car-make').value.trim(),
+      model: $('car-model').value.trim(),
+      color: $('car-color').value.trim(),
+      plate: $('car-plate').value.trim().toUpperCase()
+    },
+    current_location:   $('address').value.trim(),
+    sweeping_time:      new Date($('sweep-time').value).toISOString(),
+    key_pickup_notes:   $('pickup-instructions').value.trim(),
+    key_return_notes:   $('return-instructions').value.trim(),
+    calculated_price:   pricing.price
+  };
 
-    $('btn-next').disabled = false;
+  try {
+    // Call our server function to create a Stripe Checkout session
+    const response = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ booking })
+    });
 
-    if (error) {
-      console.error('Supabase insert failed:', error);
-      showToast('Could not save booking. Please try again.', 'error');
-      $('btn-next-label').textContent = 'Confirm & Pay';
-      isSubmitting = false;
-      return;
+    const data = await response.json();
+
+    if (!response.ok || !data.url) {
+      throw new Error(data.error || 'Could not start checkout');
     }
 
-    console.log('Booking saved!');
-    showToast('✓ Booking confirmed!', 'success');
-    $('btn-next-label').textContent = 'Booked ✓';
+    // Redirect the customer to Stripe's hosted Checkout page
+    window.location.href = data.url;
+  } catch (err) {
+    console.error('Checkout failed:', err);
+    showToast('Could not start payment. Please try again.', 'error');
+    $('btn-next-label').textContent = 'Confirm & Pay';
+    $('btn-next').disabled = false;
+    isSubmitting = false;
   }
+}
 
   $('btn-next').addEventListener('click', () => {
     if (currentStep === totalSteps) { submitBooking(); return; }

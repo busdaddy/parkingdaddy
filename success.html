@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Booking Confirmed — Parking Daddy</title>
+<link rel="icon" type="image/png" href="parking_daddy_logo.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css" />
+<style>
+  .check-circle {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ade80, #16a34a);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    animation: pop 0.5s ease-out;
+  }
+  @keyframes pop {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .booking-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    background: var(--brand-soft);
+    color: var(--brand-deep);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .loader {
+    border: 3px solid var(--line);
+    border-top-color: var(--brand);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-[var(--paper)]">
+
+<nav class="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
+  <div class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <img src="parking_daddy_logo.png" alt="" class="w-9 h-9 object-contain" />
+      <div>
+        <div class="display text-base font-bold leading-none text-[var(--ink)]">Parking Daddy</div>
+        <div class="text-[10px] text-[var(--muted)] font-medium hidden sm:block">SF Street Cleaning Valet</div>
+      </div>
+    </a>
+  </div>
+</nav>
+
+<main class="max-w-2xl mx-auto px-5 py-12 md:py-20">
+
+  <!-- Loading state while we confirm the payment -->
+  <div id="loading-state" class="text-center">
+    <div class="loader"></div>
+    <h1 class="display text-2xl font-bold text-[var(--ink)] mb-2">Confirming your booking…</h1>
+    <p class="text-[var(--muted)] text-sm">This will just take a moment.</p>
+  </div>
+
+  <!-- Success state (hidden initially) -->
+  <div id="success-state" class="hidden">
+    <div class="text-center mb-8">
+      <div class="check-circle">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h1 class="display text-4xl md:text-5xl font-bold text-[var(--ink)] leading-tight mb-2">
+        You're <em class="italic font-normal text-[var(--brand)]">all set.</em>
+      </h1>
+      <p class="text-[var(--muted)] text-base">Payment received. We've got your car covered.</p>
+    </div>
+
+    <div class="bg-white border border-[var(--line)] rounded-2xl p-6 md:p-8 mb-6">
+      <div class="flex items-center justify-between mb-5">
+        <span class="display text-lg font-bold text-[var(--ink)]">Booking Confirmed</span>
+        <span class="booking-id" id="booking-id">—</span>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between"><span class="text-[var(--muted)]">Amount paid</span><span class="font-semibold text-[var(--ink)]" id="amount">—</span></div>
+        <div class="flex justify-between"><span class="text-[var(--muted)]">Vehicle</span><span class="font-medium text-[var(--ink)] text-right" id="vehicle">—</span></div>
+        <div class="flex justify-between"><span class="text-[var(--muted)]">Sweep starts</span><span class="font-medium text-[var(--ink)] text-right" id="sweep-time">—</span></div>
+        <div class="flex justify-between"><span class="text-[var(--muted)]">Location</span><span class="font-medium text-[var(--ink)] text-right max-w-[60%]" id="location">—</span></div>
+      </div>
+    </div>
+
+    <div class="bg-[var(--brand-soft)] border border-[var(--line)] rounded-2xl p-5 mb-6">
+      <div class="flex items-start gap-3">
+        <svg class="w-5 h-5 text-[var(--brand-deep)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div class="text-sm text-[var(--ink)]">
+          <strong>What happens next:</strong> Our team has been notified. You'll get a text 30 minutes before pickup with our driver's name and arrival time.
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="index.html" class="cta-lg">Back to Home →</a>
+    </div>
+  </div>
+
+  <!-- Error state (hidden initially) -->
+  <div id="error-state" class="hidden text-center">
+    <h1 class="display text-3xl font-bold text-[var(--ink)] mb-2">Something went wrong</h1>
+    <p class="text-[var(--muted)] mb-6" id="error-message">We couldn't confirm your booking.</p>
+    <a href="contact.html" class="cta-lg">Contact Support →</a>
+  </div>
+</main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  // Read session_id from the URL (Stripe puts it there after payment)
+  const urlParams = new URLSearchParams(window.location.search);
+  const sessionId = urlParams.get('session_id');
+
+  if (!sessionId) {
+    showError('No payment session found. If you just paid, please contact support.');
+  } else {
+    confirmBooking(sessionId);
+  }
+
+  async function confirmBooking(session_id) {
+    try {
+      const response = await fetch('/api/confirm-booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Could not confirm booking');
+      }
+
+      showSuccess(data);
+    } catch (err) {
+      console.error('Confirmation failed:', err);
+      showError(err.message);
+    }
+  }
+
+  function showSuccess(data) {
+    $('loading-state').classList.add('hidden');
+    $('success-state').classList.remove('hidden');
+
+    $('booking-id').textContent = data.booking_id
+      ? `#${data.booking_id.slice(0, 8).toUpperCase()}`
+      : 'CONFIRMED';
+    $('amount').textContent = `$${data.amount}`;
+
+    if (data.car_info) {
+      const c = data.car_info;
+      $('vehicle').textContent = `${c.color} ${c.make} ${c.model} (${c.plate})`;
+    }
+
+    if (data.sweeping_time) {
+      const d = new Date(data.sweeping_time);
+      $('sweep-time').textContent = d.toLocaleString('en-US', {
+        weekday: 'short', month: 'short', day: 'numeric',
+        hour: 'numeric', minute: '2-digit'
+      });
+    }
+
+    $('location').textContent = data.current_location || '—';
+  }
+
+  function showError(message) {
+    $('loading-state').classList.add('hidden');
+    $('error-state').classList.remove('hidden');
+    $('error-message').textContent = message;
+  }
+</script>
+</body>
+</html>
