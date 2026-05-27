@@ -185,7 +185,7 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
 }
 
 // SVG checkmark — immune to HTML-entity mangling in email clients.
-const CHECKMARK_SVG = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const CHECKMARK_SVG = `<span style="color:#ffffff;font-size:32px;font-weight:bold;line-height:56px;font-family:Arial,sans-serif;">✓</span>`;
 
 function customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeFormatted }) {
   return `
