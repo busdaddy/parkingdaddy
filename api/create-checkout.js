@@ -62,6 +62,7 @@ module.exports = async (req, res) => {
       // after payment succeeds (in the success page)
       metadata: {
         car_info: JSON.stringify(booking.car_info),
+        phone: booking.phone || '',
         current_location: booking.current_location,
         sweeping_time: booking.sweeping_time,
         key_pickup_notes: booking.key_pickup_notes || '',

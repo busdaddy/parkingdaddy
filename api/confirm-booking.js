@@ -37,6 +37,7 @@ module.exports = async (req, res) => {
     // because we're running in Node, not the browser.
     const bookingData = {
       car_info: JSON.parse(session.metadata.car_info),
+      phone: session.metadata.phone || '',
       current_location: session.metadata.current_location,
       sweeping_time: session.metadata.sweeping_time,
       key_pickup_notes: session.metadata.key_pickup_notes,
