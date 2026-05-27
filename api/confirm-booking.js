@@ -80,12 +80,16 @@ module.exports = async (req, res) => {
 
     // Fire-and-forget emails — never block the response.
     // If SendGrid is down or errors, the booking still confirms.
-    sendEmails({
-      bookingData,
-      savedBooking,
-      customerEmail,
-      stripeSessionId: session_id
-    }).catch((err) => console.error('Email send error (non-blocking):', err));
+    try {
+  await sendEmails({
+    bookingData,
+    savedBooking,
+    customerEmail,
+    stripeSessionId: session_id
+  });
+} catch (err) {
+  console.error('Email send error:', err);
+}
 
     return res.status(200).json({
       success: true,
