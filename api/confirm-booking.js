@@ -150,7 +150,7 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
   const vehicleStr = [car.color, car.make, car.model].filter(Boolean).join(' ') || 'Vehicle';
   const plate = car.license_plate || car.plate || '';
 
-  // Pretty-formatted sweep time for display in emails + subject
+  // Pretty-formatted cleaning time for display in emails + subject
   const sweepTimeFormatted = formatSweepTime(bookingData.sweeping_time);
 
   const tasks = [];
@@ -209,12 +209,12 @@ function customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeF
         <tr><td style="color:#6b7a8f;">Booking ID</td><td align="right" style="font-weight:600;">#${shortId}</td></tr>
         <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Amount paid</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">$${bookingData.calculated_price}</td></tr>
         <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Vehicle</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${vehicleStr}${plate ? ` (${plate})` : ''}</td></tr>
-        <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Sweep starts</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${sweepTimeFormatted}</td></tr>
+        <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Cleaning starts</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${sweepTimeFormatted}</td></tr>
         <tr><td style="color:#6b7a8f;border-top:1px solid #e5eaf2;">Location</td><td align="right" style="font-weight:600;border-top:1px solid #e5eaf2;">${bookingData.current_location}</td></tr>
       </table>
 
       <div style="background:#eef4fb;border-radius:8px;padding:16px;margin-top:24px;font-size:14px;line-height:1.5;">
-        <strong>What happens next:</strong> We'll text you within a few hours of your scheduled sweep time to confirm pickup details, our driver's contact info, and where to expect your car returned. For anything urgent, just reply to this email.
+        <strong>What happens next:</strong> We'll text you within a few hours of your scheduled cleaning time to confirm pickup details, our driver's contact info, and where to expect your car returned. For anything urgent, just reply to this email.
       </div>
     </div>
 
@@ -239,7 +239,7 @@ function operatorEmailHtml({ bookingData, shortId, vehicleStr, plate, customerEm
 
     <div style="background:#ffffff;border:1px solid #e5eaf2;border-top:0;border-radius:0 0 8px 8px;padding:20px;">
       <table width="100%" cellpadding="8" cellspacing="0" style="font-size:15px;">
-        <tr><td style="color:#6b7a8f;width:140px;">Sweep starts</td><td style="font-weight:700;color:#FF7A1A;">${sweepTimeFormatted}</td></tr>
+        <tr><td style="color:#6b7a8f;width:140px;">Cleaning starts</td><td style="font-weight:700;color:#FF7A1A;">${sweepTimeFormatted}</td></tr>
         <tr><td style="color:#6b7a8f;">Location</td><td style="font-weight:600;">${bookingData.current_location}</td></tr>
         <tr><td style="color:#6b7a8f;">Vehicle</td><td style="font-weight:600;">${vehicleStr}</td></tr>
         <tr><td style="color:#6b7a8f;">Plate</td><td style="font-weight:600;font-family:monospace;">${plate || '—'}</td></tr>

@@ -146,7 +146,7 @@ function userWaitlistEmailHtml({ name }) {
 
       <div style="background:#eef4fb;border-radius:8px;padding:16px;margin-top:16px;font-size:14px;line-height:1.5;">
         <strong>What is Parking Daddy?</strong><br>
-        A street-cleaning valet for San Francisco. We move your car for you when it's parked on a sweep-day side, then bring it back. No more 7am alarms, no more $87 tickets.
+        A street cleaning valet for San Francisco. We move your car for you when it's parked on a cleaning-day side, then bring it back. No more 7am alarms, no more $87 tickets.
       </div>
 
       <p style="text-align:center;color:#6b7a8f;font-size:14px;margin-top:24px;">

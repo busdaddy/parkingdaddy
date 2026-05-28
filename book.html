@@ -108,7 +108,7 @@
     <!-- STEP 1 -->
     <section class="step active" id="step-1">
       <h1 class="display text-[34px] md:text-[40px] leading-[1.05] font-bold mb-1 text-[var(--ink)]">Tell us about your <em class="italic font-normal text-[var(--brand)]">ride.</em></h1>
-      <p class="text-[var(--muted)] text-sm mb-6">We'll move it before the sweepers arrive — no tickets, no tow trucks, no stress.</p>
+      <p class="text-[var(--muted)] text-sm mb-6">We'll move it before the cleaners arrive — no tickets, no tow trucks, no stress.</p>
       <div class="space-y-4">
         <div><label class="label" for="car-make">Make</label><input type="text" class="field" id="car-make" placeholder="Toyota" /></div>
         <div class="grid grid-cols-2 gap-3">
@@ -126,11 +126,11 @@
 
     <!-- STEP 2 -->
     <section class="step" id="step-2">
-      <h1 class="display text-[34px] md:text-[40px] leading-[1.05] font-bold mb-1 text-[var(--ink)]">When's the <em class="italic font-normal text-[var(--brand)]">sweep?</em></h1>
-      <p class="text-[var(--muted)] text-sm mb-6">Pick the time street sweeping <em>starts</em> on your block.</p>
+      <h1 class="display text-[34px] md:text-[40px] leading-[1.05] font-bold mb-1 text-[var(--ink)]">When's the <em class="italic font-normal text-[var(--brand)]">cleaning?</em></h1>
+      <p class="text-[var(--muted)] text-sm mb-6">Pick the time street cleaning <em>starts</em> on your block.</p>
 
       <div class="card mb-5">
-        <label class="label" for="sweep-time">Street Sweeping Starts</label>
+        <label class="label" for="sweep-time">Street Cleaning Starts</label>
         <input type="datetime-local" class="field" id="sweep-time" />
         <div id="time-feedback" class="mt-3 hidden"></div>
       </div>
@@ -179,7 +179,7 @@
       <div class="card mb-5">
         <div class="flex items-center justify-between mb-3"><span class="display text-lg font-bold">The Plan</span><span class="pill">Step 2</span></div>
         <div class="space-y-3">
-          <div class="row"><span class="k">Sweep Starts</span><span class="v" id="sum-sweeptime">—</span></div>
+          <div class="row"><span class="k">Cleaning Starts</span><span class="v" id="sum-sweeptime">—</span></div>
           <div class="row"><span class="k">Notice</span><span class="v" id="sum-notice">—</span></div>
           <div class="divider !mt-3"></div>
           <div><div class="k mb-1">Key Pickup</div><div class="v text-left !max-w-full" id="sum-pickup">—</div></div>
@@ -188,7 +188,7 @@
       </div>
 
       <div class="text-[11px] text-[var(--muted)] text-center leading-relaxed mb-4">
-        By confirming, you authorize Parking Daddy to move your vehicle before the listed sweeping time and relocate it to a legal spot nearby. See <a href="terms.html" class="underline text-[var(--brand)]">Terms</a> & <a href="privacy.html" class="underline text-[var(--brand)]">Privacy</a>.
+        By confirming, you authorize Parking Daddy to move your vehicle before the listed cleaning time and relocate it to a legal spot nearby. See <a href="terms.html" class="underline text-[var(--brand)]">Terms</a> & <a href="privacy.html" class="underline text-[var(--brand)]">Privacy</a>.
       </div>
     </section>
 
@@ -436,13 +436,13 @@
   // === PRICING: $28 standard (2+ hrs), $38 last-minute (under 2 hrs) ===
   function calculatePricing() {
     const sweepTimeStr = $('sweep-time').value;
-    if (!sweepTimeStr) return { price: 28, label: 'Standard', reason: 'Select a sweep time', urgent: false, hoursAway: null };
+    if (!sweepTimeStr) return { price: 28, label: 'Standard', reason: 'Select a cleaning time', urgent: false, hoursAway: null };
     const sweep = new Date(sweepTimeStr);
     const hoursAway = (sweep.getTime() - new Date().getTime()) / (1000 * 60 * 60);
     if (hoursAway < 2) {
       return {
         price: 38, label: 'Last Minute', urgent: true, hoursAway,
-        reason: hoursAway < 0 ? 'Sweep time is in the past — please pick a future time' : `Only ${hoursAway.toFixed(1)} hrs notice — last minute rate`
+        reason: hoursAway < 0 ? 'Cleaning time is in the past — please pick a future time' : `Only ${hoursAway.toFixed(1)} hrs notice — last minute rate`
       };
     }
     return { price: 28, label: 'Standard', urgent: false, hoursAway, reason: `${hoursAway.toFixed(1)} hours notice — standard rate` };
@@ -498,7 +498,7 @@
     if (step === 2) {
       if (!$('sweep-time').value) { $('sweep-time').focus(); return false; }
       const p = calculatePricing();
-      if (p.hoursAway !== null && p.hoursAway < 0) { showToast('Please choose a sweep time in the future.', 'error'); return false; }
+      if (p.hoursAway !== null && p.hoursAway < 0) { showToast('Please choose a cleaning time in the future.', 'error'); return false; }
     }
     return true;
   }
