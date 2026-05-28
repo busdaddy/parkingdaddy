@@ -194,7 +194,7 @@ function customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeF
 <body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6f9;color:#1E3A66;">
   <div style="max-width:560px;margin:0 auto;padding:32px 24px;">
     <div style="text-align:center;margin-bottom:24px;">
-      <img src="https://www.parking-daddy.com/parking_daddy_logo.png" alt="Parking Daddy" width="110" style="display:block;margin:0 auto 12px;width:110px;height:auto;" />
+      <img src="https://www.parking-daddy.com/parking_daddy_logo.png" alt="Parking Daddy" width="88" style="display:block;margin:0 auto 12px;width:88px;height:auto;" />
       <div style="font-size:13px;color:#6b7a8f;letter-spacing:1px;font-weight:600;">SAN FRANCISCO</div>
     </div>
 
