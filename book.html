@@ -34,6 +34,65 @@
   .price-card::after { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 70%); }
   .icon-bubble { width: 38px; height: 38px; border-radius: 12px; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   textarea.field { min-height: 84px; }
+
+  /* Waitlist-mode banner */
+  .coming-soon-banner {
+    background: linear-gradient(135deg, #F5A623, #ED8B00);
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 8px 24px -8px rgba(245,166,35,0.4);
+  }
+  .coming-soon-banner .icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .coming-soon-banner h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 2px;
+    line-height: 1.2;
+  }
+  .coming-soon-banner p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.95;
+    line-height: 1.4;
+  }
+  .coming-soon-banner button {
+    background: #ffffff;
+    color: #ED8B00;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+    transition: transform 0.12s;
+    white-space: nowrap;
+  }
+  .coming-soon-banner button:hover { transform: translateY(-1px); }
+  @media (max-width: 600px) {
+    .coming-soon-banner { flex-direction: column; text-align: center; }
+  }
+
+  /* Subtle disabled feel on the form (visible but clearly inactive) */
+  .form-disabled-overlay {
+    opacity: 0.85;
+  }
 </style>
 </head>
 <body class="bg-[var(--paper)]">
@@ -51,12 +110,29 @@
       <a href="index.html#how" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">How It Works</a>
       <a href="index.html#pricing" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Pricing</a>
       <a href="contact.html" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Contact</a>
+      <a href="#" onclick="openWaitlistModal(); return false;" class="cta-sm">Join Waitlist →</a>
     </div>
   </div>
 </nav>
 
 <main class="max-w-2xl mx-auto px-5 py-8 md:py-12">
-  <div class="bg-white border border-[var(--line)] rounded-3xl p-5 md:p-8 shadow-xl shadow-[var(--ink)]/5">
+
+  <!-- ============ COMING SOON BANNER (waitlist mode) ============ -->
+  <div class="coming-soon-banner">
+    <div class="icon-circle">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+    <div style="flex:1;">
+      <h3>Bookings open soon</h3>
+      <p>Take a look at how it'll work — and join the waitlist to be first in line at launch.</p>
+    </div>
+    <button onclick="openWaitlistModal()">Join Waitlist →</button>
+  </div>
+
+  <div class="bg-white border border-[var(--line)] rounded-3xl p-5 md:p-8 shadow-xl shadow-[var(--ink)]/5 form-disabled-overlay">
 
     <!-- Step indicator -->
     <div class="flex items-center gap-2 mb-6">
@@ -190,7 +266,7 @@
           <li><a href="index.html#how" class="hover:opacity-70">How It Works</a></li>
           <li><a href="index.html#pricing" class="hover:opacity-70">Pricing</a></li>
           <li><a href="index.html#faq" class="hover:opacity-70">FAQ</a></li>
-          <li><a href="book.html" class="hover:opacity-70">Book a Move</a></li>
+          <li><a href="#" onclick="openWaitlistModal(); return false;" class="hover:opacity-70">Join Waitlist</a></li>
         </ul>
       </div>
       <div>
@@ -209,14 +285,146 @@
   </div>
 </footer>
 
+<!-- ============ WAITLIST MODAL ============ -->
+<div id="waitlist-modal" style="display:none;position:fixed;inset:0;background:rgba(30,58,102,0.6);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#ffffff;border-radius:16px;max-width:440px;width:100%;padding:32px 28px;box-shadow:0 20px 50px rgba(0,0,0,0.25);position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1E3A66;">
+
+    <button onclick="closeWaitlistModal()" aria-label="Close" style="position:absolute;top:12px;right:12px;background:none;border:0;font-size:24px;color:#9aa5b8;cursor:pointer;padding:4px 10px;line-height:1;">&times;</button>
+
+    <div id="waitlist-form-state">
+      <h2 style="margin:0 0 8px;font-size:24px;color:#1E3A66;font-family:'Fraunces',serif;">Join the waitlist</h2>
+      <p style="margin:0 0 24px;color:#6b7a8f;font-size:14px;line-height:1.5;">We're putting the finishing touches on Parking Daddy. Drop your info and we'll let you know the moment we're live.</p>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#1E3A66;margin-bottom:6px;">Name</label>
+        <input id="wl-name" type="text" placeholder="Your name" style="width:100%;padding:11px 14px;border:1px solid #d6dde8;border-radius:8px;font-size:15px;box-sizing:border-box;font-family:inherit;" />
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#1E3A66;margin-bottom:6px;">Email</label>
+        <input id="wl-email" type="email" placeholder="you@example.com" style="width:100%;padding:11px 14px;border:1px solid #d6dde8;border-radius:8px;font-size:15px;box-sizing:border-box;font-family:inherit;" />
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#1E3A66;margin-bottom:6px;">ZIP code</label>
+        <input id="wl-zip" type="text" inputmode="numeric" maxlength="5" placeholder="94123" style="width:100%;padding:11px 14px;border:1px solid #d6dde8;border-radius:8px;font-size:15px;box-sizing:border-box;font-family:inherit;" />
+      </div>
+
+      <div id="wl-error" style="display:none;background:#fef2f2;color:#b91c1c;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;"></div>
+
+      <button id="wl-submit" onclick="submitWaitlist()" style="width:100%;padding:13px 16px;background:#4A90D9;color:#ffffff;border:0;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Join the waitlist</button>
+
+      <p style="text-align:center;font-size:12px;color:#9aa5b8;margin:14px 0 0;">We'll only email you when we launch. No spam, ever.</p>
+    </div>
+
+    <div id="waitlist-success-state" style="display:none;text-align:center;padding:12px 0;">
+      <div style="width:64px;height:64px;background:#22c55e;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#ffffff;font-size:36px;font-weight:bold;line-height:1;font-family:Arial,sans-serif;">✓</span>
+      </div>
+      <h2 style="margin:0 0 8px;font-size:24px;color:#1E3A66;font-family:'Fraunces',serif;">You're on the list.</h2>
+      <p style="margin:0 0 24px;color:#6b7a8f;font-size:14px;line-height:1.5;">Check your inbox for a confirmation. We'll be in touch the moment we go live.</p>
+      <button onclick="closeWaitlistModal()" style="padding:11px 24px;background:#1E3A66;color:#ffffff;border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Close</button>
+    </div>
+
+  </div>
+</div>
+
 <script>
   // ============================================================
-  // Supabase setup
+  // WAITLIST MODAL — opens whenever a CTA is clicked
   // ============================================================
-  // Replace with your project URL + anon key from Supabase Dashboard → Settings → API
+  function openWaitlistModal() {
+    document.getElementById('waitlist-modal').style.display = 'flex';
+    document.getElementById('waitlist-form-state').style.display = 'block';
+    document.getElementById('waitlist-success-state').style.display = 'none';
+    document.getElementById('wl-error').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() {
+      var nameInput = document.getElementById('wl-name');
+      if (nameInput) nameInput.focus();
+    }, 50);
+  }
+
+  function closeWaitlistModal() {
+    document.getElementById('waitlist-modal').style.display = 'none';
+    document.body.style.overflow = '';
+    document.getElementById('wl-name').value = '';
+    document.getElementById('wl-email').value = '';
+    document.getElementById('wl-zip').value = '';
+  }
+
+  document.getElementById('waitlist-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeWaitlistModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var modal = document.getElementById('waitlist-modal');
+      if (modal && modal.style.display === 'flex') closeWaitlistModal();
+    }
+  });
+
+  async function submitWaitlist() {
+    var btn = document.getElementById('wl-submit');
+    var errBox = document.getElementById('wl-error');
+    errBox.style.display = 'none';
+
+    var name = document.getElementById('wl-name').value.trim();
+    var email = document.getElementById('wl-email').value.trim();
+    var zip = document.getElementById('wl-zip').value.trim();
+
+    if (!name || !email || !zip) {
+      errBox.textContent = 'Please fill in all fields.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      errBox.textContent = 'That email doesn\'t look right.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (!/^\d{5}$/.test(zip)) {
+      errBox.textContent = 'ZIP code should be 5 digits.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Joining...';
+
+    try {
+      var response = await fetch('/api/join-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, zip: zip })
+      });
+
+      if (!response.ok) {
+        var data = await response.json().catch(function() { return {}; });
+        throw new Error(data.error || 'Something went wrong');
+      }
+
+      document.getElementById('waitlist-form-state').style.display = 'none';
+      document.getElementById('waitlist-success-state').style.display = 'block';
+    } catch (err) {
+      errBox.textContent = err.message || 'Could not save signup. Please try again.';
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Join the waitlist';
+    }
+  }
+
+  // ============================================================
+  // BOOKING FORM (original logic preserved — but submission
+  // intercepted in waitlist mode to open the waitlist modal)
+  // ============================================================
   const SUPABASE_URL = 'https://gwnokpzngaajwfrtaomy.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3bm9rcHpuZ2FhandmcnRhb215Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NjU1NzQsImV4cCI6MjA5NTM0MTU3NH0.BSjCRSN8Of09RYwH37zhiisE-bKLAUBj1ts2zFGLF4I';
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // === WAITLIST MODE FLAG ===
+  // Set to false to re-enable real bookings.
+  const WAITLIST_MODE = true;
 
   let currentStep = 1;
   const totalSteps = 3;
@@ -254,7 +462,7 @@
     $('btn-back').classList.toggle('hidden', currentStep === 1);
 
     if (currentStep === 3) {
-      $('btn-next-label').textContent = 'Confirm & Pay';
+      $('btn-next-label').textContent = WAITLIST_MODE ? 'Join the Waitlist →' : 'Confirm & Pay';
       $('btn-next').classList.add('accent');
       populateSummary();
     } else {
@@ -334,59 +542,59 @@
   }
 
   // ============================================================
-  // Submit booking to Supabase
+  // Submit booking — INTERCEPTED in waitlist mode
   // ============================================================
   async function submitBooking() {
-  if (isSubmitting) return;
-  isSubmitting = true;
-  $('btn-next-label').textContent = 'Redirecting to payment…';
-  $('btn-next').disabled = true;
-
-  const pricing = calculatePricing();
-
-  // Build the booking object — same shape as before, but we no longer
-  // save it to Supabase here. Instead, we send it to our server function,
-  // which creates a Stripe Checkout session. The booking will be saved
-  // AFTER payment succeeds (on the success page).
-  const booking = {
-    car_info: {
-      make:  $('car-make').value.trim(),
-      model: $('car-model').value.trim(),
-      color: $('car-color').value.trim(),
-      plate: $('car-plate').value.trim().toUpperCase()
-    },
-    phone: $('phone').value.trim(),
-    current_location:   $('address').value.trim(),
-    sweeping_time:      new Date($('sweep-time').value).toISOString(),
-    key_pickup_notes:   $('pickup-instructions').value.trim(),
-    key_return_notes:   $('return-instructions').value.trim(),
-    calculated_price:   pricing.price
-  };
-
-  try {
-    // Call our server function to create a Stripe Checkout session
-    const response = await fetch('/api/create-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ booking })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.url) {
-      throw new Error(data.error || 'Could not start checkout');
+    // In waitlist mode, hand off to the waitlist modal instead of Stripe.
+    if (WAITLIST_MODE) {
+      openWaitlistModal();
+      return;
     }
 
-    // Redirect the customer to Stripe's hosted Checkout page
-    window.location.href = data.url;
-  } catch (err) {
-    console.error('Checkout failed:', err);
-    showToast('Could not start payment. Please try again.', 'error');
-    $('btn-next-label').textContent = 'Confirm & Pay';
-    $('btn-next').disabled = false;
-    isSubmitting = false;
+    // === Real booking flow (used when WAITLIST_MODE = false) ===
+    if (isSubmitting) return;
+    isSubmitting = true;
+    $('btn-next-label').textContent = 'Redirecting to payment…';
+    $('btn-next').disabled = true;
+
+    const pricing = calculatePricing();
+    const booking = {
+      car_info: {
+        make:  $('car-make').value.trim(),
+        model: $('car-model').value.trim(),
+        color: $('car-color').value.trim(),
+        plate: $('car-plate').value.trim().toUpperCase()
+      },
+      phone: $('phone').value.trim(),
+      current_location:   $('address').value.trim(),
+      sweeping_time:      new Date($('sweep-time').value).toISOString(),
+      key_pickup_notes:   $('pickup-instructions').value.trim(),
+      key_return_notes:   $('return-instructions').value.trim(),
+      calculated_price:   pricing.price
+    };
+
+    try {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ booking })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || 'Could not start checkout');
+      }
+
+      window.location.href = data.url;
+    } catch (err) {
+      console.error('Checkout failed:', err);
+      showToast('Could not start payment. Please try again.', 'error');
+      $('btn-next-label').textContent = 'Confirm & Pay';
+      $('btn-next').disabled = false;
+      isSubmitting = false;
+    }
   }
-}
 
   $('btn-next').addEventListener('click', () => {
     if (currentStep === totalSteps) { submitBooking(); return; }

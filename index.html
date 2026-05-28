@@ -18,6 +18,33 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css" />
+<style>
+  /* Waitlist mode: struck-through "Book" buttons indicate unavailable */
+  .book-disabled {
+    position: relative;
+    opacity: 0.55;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    cursor: pointer;
+  }
+  .book-disabled:hover { opacity: 0.7; }
+
+  /* Soft "coming soon" tag floating above a struck button */
+  .soon-tag {
+    position: absolute;
+    top: -10px;
+    right: -8px;
+    background: #F5A623;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+</style>
 </head>
 <body class="bg-[var(--paper)]">
 
@@ -36,7 +63,7 @@
       <a href="#pricing" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Pricing</a>
       <a href="#faq" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">FAQ</a>
       <a href="contact.html" class="hidden md:inline px-3 py-2 text-sm font-medium text-[var(--ink)] hover:text-[var(--brand)]">Contact</a>
-      <a href="book.html" class="cta-sm">Book Now →</a>
+      <a href="#" onclick="openWaitlistModal(); return false;" class="cta-sm">Join Waitlist →</a>
     </div>
   </div>
 </nav>
@@ -51,7 +78,7 @@
     <div class="md:col-span-7">
       <div class="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full bg-white border border-[var(--line)] text-xs font-semibold text-[var(--ink)]">
         <span class="live-dot"></span>
-        Now serving 94123 — Marina · Cow Hollow · Pac Heights
+        Launching soon in 94123 — Marina · Cow Hollow · Pac Heights
       </div>
       <h1 class="display text-[44px] sm:text-[60px] md:text-[72px] leading-[0.95] font-bold text-[var(--ink)] mb-5">
         Never get a<br/>
@@ -62,12 +89,16 @@
         We move your car before the street sweepers arrive — and put it back in a legal spot before you need it. No tickets. No tows. No 6am alarms.
       </p>
       <div class="flex flex-wrap items-center gap-3">
-        <a href="book.html" class="cta-lg">Book a Move →</a>
-        <a href="#how" class="ghost-lg">How it works</a>
+        <a href="#" onclick="openWaitlistModal(); return false;" class="cta-lg book-disabled relative">
+          <span class="soon-tag">Soon</span>
+          Book a Move →
+        </a>
+        <a href="#" onclick="openWaitlistModal(); return false;" class="cta-lg">Join the Waitlist →</a>
       </div>
-      <div class="mt-8 flex items-center gap-6 text-sm text-[var(--muted)]">
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted)]">
         <div class="flex items-center gap-2"><svg class="w-5 h-5 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> $40 standard rate</div>
         <div class="flex items-center gap-2"><svg class="w-5 h-5 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Same-day booking</div>
+        <div class="flex items-center gap-2"><svg class="w-5 h-5 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Licensed & insured drivers</div>
       </div>
     </div>
 
@@ -110,7 +141,7 @@
         <div class="step-num">2</div>
         <h3 class="display text-2xl font-bold mb-2">We grab your keys</h3>
         <p class="text-[var(--muted)] leading-relaxed">
-          Lockbox, lobby, doorman, or in-person handoff — whatever works for you. Tesla and other remote-unlock cars: even easier. We move your car to a legal spot nearby.
+          Our licensed, background-checked, fully insured drivers pick up your key — lockbox, lobby, doorman, or in person. Tesla and other remote-unlock cars: even easier. Your car moves to a legal spot nearby.
         </p>
       </div>
       <div class="step-card">
@@ -166,8 +197,12 @@
       </div>
     </div>
 
-    <div class="mt-8 text-center">
-      <a href="book.html" class="cta-lg">Book Now →</a>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a href="#" onclick="openWaitlistModal(); return false;" class="cta-lg book-disabled relative">
+        <span class="soon-tag">Soon</span>
+        Book Now →
+      </a>
+      <a href="#" onclick="openWaitlistModal(); return false;" class="cta-lg">Join the Waitlist →</a>
     </div>
   </div>
 </section>
@@ -184,12 +219,20 @@
 
     <div class="space-y-3">
       <details class="faq-item">
+        <summary>When are you launching?</summary>
+        <p>Very soon — we're putting the final pieces in place. Join the waitlist and you'll be one of the first to know the day bookings open.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Who's driving my car? Are they insured?</summary>
+        <p>Every Parking Daddy driver is licensed, background-checked, and covered by our commercial insurance policy while your vehicle is in our care. We treat each car like our own — and we don't take chances with who we hire.</p>
+      </details>
+      <details class="faq-item">
         <summary>What if I can't be there for key pickup?</summary>
         <p>That's the whole point — you don't have to be. Drop your key in a lockbox, leave it with your doorman, hide it somewhere we agree on, or use remote unlock if your car supports it (Tesla, newer BMWs, etc.). You tell us how during booking.</p>
       </details>
       <details class="faq-item">
         <summary>What areas do you cover?</summary>
-        <p>Right now we serve ZIP 94123 only — that's the Marina District plus parts of Cow Hollow and Pacific Heights. We're expanding to other SF neighborhoods soon. Want yours next? Tell us via the Contact page.</p>
+        <p>At launch we'll serve ZIP 94123 only — the Marina District plus parts of Cow Hollow and Pacific Heights. We're planning to expand to other SF neighborhoods after. Want yours next? Tell us via the Contact page.</p>
       </details>
       <details class="faq-item">
         <summary>What if the original spot is taken when you return my car?</summary>
@@ -200,16 +243,12 @@
         <p>We move your car at least 15 minutes before the official sweep start time and only return it after the posted window ends. We also know which blocks the sweepers actually hit on time vs. skip — local knowledge helps.</p>
       </details>
       <details class="faq-item">
-        <summary>Is my car insured while you have it?</summary>
-        <p>Our drivers are licensed and we're working on commercial coverage for this phase of the business. For full peace of mind during our pilot phase, your own insurance policy is still the primary coverage. We're happy to talk through this — reach out via Contact.</p>
-      </details>
-      <details class="faq-item">
         <summary>What if I need to cancel?</summary>
         <p>Cancel free up to 4 hours before your scheduled move. Within 4 hours, we charge a $20 dispatch fee since we've already routed a driver. See our Terms for the full policy.</p>
       </details>
       <details class="faq-item">
         <summary>Do you operate on weekends?</summary>
-        <p>SF street sweeping is mostly Mon–Fri, so that's when we operate (6am–2pm). A few blocks have weekend schedules — book those the same way.</p>
+        <p>SF street sweeping is mostly Mon–Fri, so that's when we'll operate (6am–2pm). A few blocks have weekend schedules — book those the same way.</p>
       </details>
       <details class="faq-item">
         <summary>How do I pay?</summary>
@@ -225,8 +264,8 @@
     <h2 class="display text-4xl md:text-5xl font-bold text-[var(--ink)] leading-tight mb-4">
       Sleep in. <em class="italic font-normal text-[var(--brand)]">We've got the car.</em>
     </h2>
-    <p class="text-lg text-[var(--muted)] mb-8 max-w-xl mx-auto">Book your first move in 60 seconds.</p>
-    <a href="book.html" class="cta-lg">Book Now →</a>
+    <p class="text-lg text-[var(--muted)] mb-8 max-w-xl mx-auto">Be one of the first to book when we launch. Join the waitlist below.</p>
+    <a href="#" onclick="openWaitlistModal(); return false;" class="cta-lg">Join the Waitlist →</a>
   </div>
 </section>
 
@@ -252,7 +291,7 @@
           <li><a href="index.html#how" class="hover:opacity-70">How It Works</a></li>
           <li><a href="index.html#pricing" class="hover:opacity-70">Pricing</a></li>
           <li><a href="index.html#faq" class="hover:opacity-70">FAQ</a></li>
-          <li><a href="book.html" class="hover:opacity-70">Book a Move</a></li>
+          <li><a href="#" onclick="openWaitlistModal(); return false;" class="hover:opacity-70">Join Waitlist</a></li>
         </ul>
       </div>
 
@@ -272,6 +311,133 @@
     </div>
   </div>
 </footer>
+
+<!-- ============ WAITLIST MODAL ============ -->
+<div id="waitlist-modal" style="display:none;position:fixed;inset:0;background:rgba(30,58,102,0.6);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#ffffff;border-radius:16px;max-width:440px;width:100%;padding:32px 28px;box-shadow:0 20px 50px rgba(0,0,0,0.25);position:relative;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1E3A66;">
+
+    <button onclick="closeWaitlistModal()" aria-label="Close" style="position:absolute;top:12px;right:12px;background:none;border:0;font-size:24px;color:#9aa5b8;cursor:pointer;padding:4px 10px;line-height:1;">&times;</button>
+
+    <div id="waitlist-form-state">
+      <h2 style="margin:0 0 8px;font-size:24px;color:#1E3A66;font-family:'Fraunces',serif;">Join the waitlist</h2>
+      <p style="margin:0 0 24px;color:#6b7a8f;font-size:14px;line-height:1.5;">We're putting the finishing touches on Parking Daddy. Drop your info and we'll let you know the moment we're live.</p>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#1E3A66;margin-bottom:6px;">Name</label>
+        <input id="wl-name" type="text" placeholder="Your name" style="width:100%;padding:11px 14px;border:1px solid #d6dde8;border-radius:8px;font-size:15px;box-sizing:border-box;font-family:inherit;" />
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#1E3A66;margin-bottom:6px;">Email</label>
+        <input id="wl-email" type="email" placeholder="you@example.com" style="width:100%;padding:11px 14px;border:1px solid #d6dde8;border-radius:8px;font-size:15px;box-sizing:border-box;font-family:inherit;" />
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#1E3A66;margin-bottom:6px;">ZIP code</label>
+        <input id="wl-zip" type="text" inputmode="numeric" maxlength="5" placeholder="94123" style="width:100%;padding:11px 14px;border:1px solid #d6dde8;border-radius:8px;font-size:15px;box-sizing:border-box;font-family:inherit;" />
+      </div>
+
+      <div id="wl-error" style="display:none;background:#fef2f2;color:#b91c1c;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;"></div>
+
+      <button id="wl-submit" onclick="submitWaitlist()" style="width:100%;padding:13px 16px;background:#4A90D9;color:#ffffff;border:0;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Join the waitlist</button>
+
+      <p style="text-align:center;font-size:12px;color:#9aa5b8;margin:14px 0 0;">We'll only email you when we launch. No spam, ever.</p>
+    </div>
+
+    <div id="waitlist-success-state" style="display:none;text-align:center;padding:12px 0;">
+      <div style="width:64px;height:64px;background:#22c55e;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#ffffff;font-size:36px;font-weight:bold;line-height:1;font-family:Arial,sans-serif;">✓</span>
+      </div>
+      <h2 style="margin:0 0 8px;font-size:24px;color:#1E3A66;font-family:'Fraunces',serif;">You're on the list.</h2>
+      <p style="margin:0 0 24px;color:#6b7a8f;font-size:14px;line-height:1.5;">Check your inbox for a confirmation. We'll be in touch the moment we go live.</p>
+      <button onclick="closeWaitlistModal()" style="padding:11px 24px;background:#1E3A66;color:#ffffff;border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Close</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function openWaitlistModal() {
+    document.getElementById('waitlist-modal').style.display = 'flex';
+    document.getElementById('waitlist-form-state').style.display = 'block';
+    document.getElementById('waitlist-success-state').style.display = 'none';
+    document.getElementById('wl-error').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() {
+      var nameInput = document.getElementById('wl-name');
+      if (nameInput) nameInput.focus();
+    }, 50);
+  }
+
+  function closeWaitlistModal() {
+    document.getElementById('waitlist-modal').style.display = 'none';
+    document.body.style.overflow = '';
+    document.getElementById('wl-name').value = '';
+    document.getElementById('wl-email').value = '';
+    document.getElementById('wl-zip').value = '';
+  }
+
+  document.getElementById('waitlist-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeWaitlistModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var modal = document.getElementById('waitlist-modal');
+      if (modal && modal.style.display === 'flex') closeWaitlistModal();
+    }
+  });
+
+  async function submitWaitlist() {
+    var btn = document.getElementById('wl-submit');
+    var errBox = document.getElementById('wl-error');
+    errBox.style.display = 'none';
+
+    var name = document.getElementById('wl-name').value.trim();
+    var email = document.getElementById('wl-email').value.trim();
+    var zip = document.getElementById('wl-zip').value.trim();
+
+    if (!name || !email || !zip) {
+      errBox.textContent = 'Please fill in all fields.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      errBox.textContent = 'That email doesn\'t look right.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (!/^\d{5}$/.test(zip)) {
+      errBox.textContent = 'ZIP code should be 5 digits.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Joining...';
+
+    try {
+      var response = await fetch('/api/join-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, zip: zip })
+      });
+
+      if (!response.ok) {
+        var data = await response.json().catch(function() { return {}; });
+        throw new Error(data.error || 'Something went wrong');
+      }
+
+      document.getElementById('waitlist-form-state').style.display = 'none';
+      document.getElementById('waitlist-success-state').style.display = 'block';
+    } catch (err) {
+      errBox.textContent = err.message || 'Could not save signup. Please try again.';
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Join the waitlist';
+    }
+  }
+</script>
 
 </body>
 </html>
