@@ -141,7 +141,11 @@
         </a>
         <a href="#" onclick="openWaitlistModal(); return false;" class="cta-lg flex-1 md:flex-none text-center justify-center">Join the Waitlist →</a>
       </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted)]">
+      <a href="#" onclick="document.querySelector('.guarantee-band')?.scrollIntoView({behavior:'smooth'}); return false;" class="mt-7 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-white" style="background:linear-gradient(135deg,#F5A623,#ED8B00);box-shadow:0 6px 18px -6px rgba(245,166,35,0.6);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 7.5-8.5 9C7.5 19.5 3 17 3 12V6l9-3 9 3v6z"/></svg>
+        Ticket-free guarantee — or we pay it
+      </a>
+      <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted)]">
         <div class="flex items-center gap-2"><svg class="w-5 h-5 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> From $28 per move</div>
         <div class="flex items-center gap-2"><svg class="w-5 h-5 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Same-day booking</div>
         <div class="flex items-center gap-2"><svg class="w-5 h-5 text-[var(--brand)]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Licensed & insured drivers</div>
@@ -255,7 +259,7 @@
 </section>
 
 <!-- ============ TICKET-FREE GUARANTEE ============ -->
-<section class="py-16 md:py-24">
+<section class="py-16 md:py-24 guarantee-band">
   <div class="max-w-4xl mx-auto px-5">
     <div class="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[var(--brand-deep,#1E3A66)] to-[var(--brand,#4A90D9)] text-white px-7 py-12 md:px-14 md:py-16 text-center shadow-xl">
       <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/10"></div>
