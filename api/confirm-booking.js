@@ -185,7 +185,7 @@ async function sendEmails({ bookingData, savedBooking, customerEmail, stripeSess
 }
 
 // SVG checkmark — immune to HTML-entity mangling in email clients.
-const CHECKMARK_SVG = `<span style="color:#ffffff;font-size:32px;font-weight:bold;line-height:56px;font-family:Arial,sans-serif;">✓</span>`;
+const CHECKMARK_SVG = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 function customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeFormatted }) {
   return `
@@ -194,8 +194,9 @@ function customerEmailHtml({ bookingData, shortId, vehicleStr, plate, sweepTimeF
 <body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6f9;color:#1E3A66;">
   <div style="max-width:560px;margin:0 auto;padding:32px 24px;">
     <div style="text-align:center;margin-bottom:24px;">
+      <img src="https://www.parking-daddy.com/parking_daddy_logo.png" alt="Parking Daddy" width="64" height="64" style="display:block;margin:0 auto 10px;width:64px;height:64px;object-fit:contain;" />
       <div style="font-size:24px;font-weight:700;color:#1E3A66;">Parking Daddy</div>
-      <div style="font-size:13px;color:#6b7a8f;letter-spacing:0.5px;">SF STREET CLEANING VALET</div>
+      <div style="font-size:13px;color:#6b7a8f;letter-spacing:0.5px;">SAN FRANCISCO</div>
     </div>
 
     <div style="background:#ffffff;border-radius:12px;padding:32px 28px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
